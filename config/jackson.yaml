@@ -6,6 +6,11 @@ services:
   Tcds\Io\Jackson\JsonObjectMapper: ~
   Tcds\Io\Jackson\ObjectMapper: '@Tcds\Io\Jackson\ArrayObjectMapper'
 
+  Tcds\Io\Jackson\Symfony\Console\ConfigureJacksonCommand:
+    arguments:
+      $projectDir: '%kernel.project_dir%'
+    tags: [ 'console.command' ]
+
   Tcds\Io\Jackson\Symfony\JacksonConfig:
     arguments:
       $configFilePath: '%jackson.config_file%'

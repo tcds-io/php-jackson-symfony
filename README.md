@@ -15,6 +15,12 @@ This package lets you:
 ```bash
 composer require tcds-io/php-jackson-symfony
 ```
+
+Then create the configuration file:
+```bash
+bin/console jackson:configure # config/jackson.php
+```
+
 ---
 
 ## ⚙️ How it works
