@@ -1,0 +1,29 @@
+parameters:
+  jackson.config_file: '%kernel.project_dir%/config/jackson.php'
+
+services:
+  Tcds\Io\Jackson\ArrayObjectMapper: ~
+  Tcds\Io\Jackson\JsonObjectMapper: ~
+  Tcds\Io\Jackson\ObjectMapper: '@Tcds\Io\Jackson\ArrayObjectMapper'
+
+  Tcds\Io\Jackson\Symfony\JacksonConfig:
+    arguments:
+      $configFilePath: '%jackson.config_file%'
+      $mapper: '@Tcds\Io\Jackson\ObjectMapper'
+      $container: '@service_container'
+
+  Tcds\Io\Jackson\Symfony\Http\JacksonArgumentResolver:
+    arguments:
+      $mapper: '@Tcds\Io\Jackson\ObjectMapper'
+      $config: '@Tcds\Io\Jackson\Symfony\JacksonConfig'
+    tags:
+      - { name: controller.argument_value_resolver, priority: -1000 }
+
+  Tcds\Io\Jackson\Symfony\Http\JacksonResponseSubscriber:
+    arguments:
+      $mapper: '@Tcds\Io\Jackson\JsonObjectMapper'
+      $config: '@Tcds\Io\Jackson\Symfony\JacksonConfig'
+    tags: [ kernel.event_subscriber ]
+
+  Tcds\Io\Jackson\Symfony\Http\JacksonExceptionSubscriber:
+    tags: [ kernel.event_subscriber ]
