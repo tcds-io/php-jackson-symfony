@@ -7,7 +7,7 @@
   "require": {
     "php": ">=8.4",
     "ext-json": "*",
-    "tcds-io/php-jackson": "dev-main",
+    "tcds-io/php-jackson": "^1.0.0",
     "symfony/framework-bundle": "^8.0"
   },
   "require-dev": {

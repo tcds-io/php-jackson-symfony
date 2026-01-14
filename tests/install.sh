@@ -16,6 +16,6 @@ composer config \
   repositories.php-jackson-symfony '{"type": "path", "url": "./../../", "options": {"symlink": true}}' \
   --working-dir=$WORKDIR
 
-composer require tcds-io/php-jackson:dev-main \
+composer require tcds-io/php-jackson \
     tcds-io/php-jackson-symfony:* \
     --working-dir=$WORKDIR
