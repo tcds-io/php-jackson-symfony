@@ -4,8 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "505e1db655d5dda40f6cf6d2ff15e8cb",
+    "content-hash": "da01879c1a632fad62e493a1fd295271",
     "packages": [
+        {
+            "name": "phpstan/phpdoc-parser",
+            "version": "2.3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpstan/phpdoc-parser.git",
+                "reference": "4d4ad14907af751b3f924d6083492c2f22a76c00"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpstan/phpdoc-parser/zipball/4d4ad14907af751b3f924d6083492c2f22a76c00",
+                "reference": "4d4ad14907af751b3f924d6083492c2f22a76c00",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8.0"
+            },
+            "require-dev": {
+                "doctrine/annotations": "^2.0",
+                "nikic/php-parser": "^5.3.0",
+                "php-parallel-lint/php-parallel-lint": "^1.2",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^9.6",
+                "symfony/process": "^5.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "PHPStan\\PhpDocParser\\": [
+                        "src/"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHPDoc parser with support for nullable, intersection and generic types",
+            "support": {
+                "issues": "https://github.com/phpstan/phpdoc-parser/issues",
+                "source": "https://github.com/phpstan/phpdoc-parser/tree/2.3.x"
+            },
+            "time": "2026-02-26T12:23:26+00:00"
+        },
         {
             "name": "psr/cache",
             "version": "dev-master",
@@ -1933,25 +1981,26 @@
         },
         {
             "name": "tcds-io/php-better-generics",
-            "version": "0.1.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tcds-io/php-better-generics.git",
-                "reference": "582d653d4aaabf70697b556051690b7c419c02c0"
+                "reference": "20dfb6284e14718ff6fe68147a5676751e0c5123"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tcds-io/php-better-generics/zipball/582d653d4aaabf70697b556051690b7c419c02c0",
-                "reference": "582d653d4aaabf70697b556051690b7c419c02c0",
+                "url": "https://api.github.com/repos/tcds-io/php-better-generics/zipball/20dfb6284e14718ff6fe68147a5676751e0c5123",
+                "reference": "20dfb6284e14718ff6fe68147a5676751e0c5123",
                 "shasum": ""
             },
             "require": {
-                "php": "^8.4"
+                "php": "^8.4",
+                "phpstan/phpdoc-parser": "^2.0"
             },
             "require-dev": {
                 "phpstan/phpstan": "^2.1",
                 "phpunit/phpunit": "^10.5",
-                "slevomat/coding-standard": "^8.15",
+                "slevomat/coding-standard": "^8.16",
                 "symfony/var-dumper": "^7.2"
             },
             "type": "library",
@@ -1976,28 +2025,28 @@
             "description": "PHP library to better work with generics",
             "support": {
                 "issues": "https://github.com/tcds-io/php-better-generics/issues",
-                "source": "https://github.com/tcds-io/php-better-generics/tree/0.1.0"
+                "source": "https://github.com/tcds-io/php-better-generics/tree/1.0.0"
             },
-            "time": "2026-01-13T13:33:25+00:00"
+            "time": "2026-05-03T15:24:21+00:00"
         },
         {
             "name": "tcds-io/php-jackson",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tcds-io/php-jackson.git",
-                "reference": "dd10d1d95c07cfef1d6f139f3bf80d3de90dad02"
+                "reference": "ee84851810743a9f39852bed025ad0041a4fbd96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tcds-io/php-jackson/zipball/dd10d1d95c07cfef1d6f139f3bf80d3de90dad02",
-                "reference": "dd10d1d95c07cfef1d6f139f3bf80d3de90dad02",
+                "url": "https://api.github.com/repos/tcds-io/php-jackson/zipball/ee84851810743a9f39852bed025ad0041a4fbd96",
+                "reference": "ee84851810743a9f39852bed025ad0041a4fbd96",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "php": ">=8.4",
-                "tcds-io/php-better-generics": "^0.1.0"
+                "tcds-io/php-better-generics": "^1.0"
             },
             "require-dev": {
                 "nesbot/carbon": "^3.10",
@@ -2022,9 +2071,9 @@
             "description": "A lightweight, flexible object serializer for PHP, inspired by FasterXML/jackson",
             "support": {
                 "issues": "https://github.com/tcds-io/php-jackson/issues",
-                "source": "https://github.com/tcds-io/php-jackson/tree/1.0.0"
+                "source": "https://github.com/tcds-io/php-jackson/tree/1.1.0"
             },
-            "time": "2026-01-14T08:38:19+00:00"
+            "time": "2026-05-03T19:20:53+00:00"
         }
     ],
     "packages-dev": [
@@ -3942,5 +3991,5 @@
         "ext-json": "*"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

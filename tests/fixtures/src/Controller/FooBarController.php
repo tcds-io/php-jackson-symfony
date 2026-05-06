@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Domain\Foo;
+use App\Domain\Greeting;
 use App\Queries\InvoiceQuery;
 use Symfony\Component\Routing\Attribute\Route;
+use Tcds\Io\Jackson\Symfony\Attributes\JacksonInject;
+use Tcds\Io\Jackson\Symfony\Attributes\JacksonResponse;
 
 class FooBarController
 {
@@ -33,5 +36,12 @@ class FooBarController
     public function invoices(InvoiceQuery $query): InvoiceQuery
     {
         return $query;
+    }
+
+    #[Route('/attribute', methods: ['POST'])]
+    #[JacksonResponse(status: 201, headers: ['X-Jackson' => 'attribute'])]
+    public function attribute(#[JacksonInject] Greeting $greeting): Greeting
+    {
+        return $greeting;
     }
 }

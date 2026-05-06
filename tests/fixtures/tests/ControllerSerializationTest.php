@@ -36,13 +36,13 @@ class ControllerSerializationTest extends WebTestCase
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
             <<<JSON
-            {
-              "id": 10,
-              "a": "something",
-              "b": "something else",
-              "type": "AAA"
-            }
-            JSON,
+                {
+                  "id": 10,
+                  "a": "something",
+                  "b": "something else",
+                  "type": "AAA"
+                }
+                JSON,
             $response->getContent(),
         );
     }
@@ -61,15 +61,14 @@ class ControllerSerializationTest extends WebTestCase
 
         $response = $this->client->getResponse();
 
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->getStatusCode());
         $this->assertJsonStringEqualsJsonString(
             <<<JSON
-            {
-              "message": "Unable to parse value at .type",
-              "expected": ["AAA", "BBB"],
-              "given": "string"
-            }
-            JSON,
+                {
+                  "error": "Unable to parse value at .type",
+                  "hint": "Check the request body format."
+                }
+                JSON,
             $response->getContent(),
         );
     }
@@ -99,21 +98,21 @@ class ControllerSerializationTest extends WebTestCase
 
         $this->assertJsonStringEqualsJsonString(
             <<<JSON
-            [
-                {
-                  "id": 10,
-                  "a": "aaa",
-                  "b": "list aaa",
-                  "type": "AAA"
-                },
-                {
-                  "id": 11,
-                  "a": "bbb",
-                  "b": "list bbb",
-                  "type": "BBB"
-                }
-            ]
-            JSON,
+                [
+                    {
+                      "id": 10,
+                      "a": "aaa",
+                      "b": "list aaa",
+                      "type": "AAA"
+                    },
+                    {
+                      "id": 11,
+                      "a": "bbb",
+                      "b": "list bbb",
+                      "type": "BBB"
+                    }
+                ]
+                JSON,
             $response->getContent(),
         );
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
@@ -131,14 +130,38 @@ class ControllerSerializationTest extends WebTestCase
 
         $this->assertJsonStringEqualsJsonString(
             <<<JSON
-            {
-              "id": 165,
-              "userId": 150,
-              "customer": "Tcds.Io"
-            }
-            JSON,
+                {
+                  "id": 165,
+                  "userId": 150,
+                  "customer": "Tcds.Io"
+                }
+                JSON,
             $response->getContent(),
         );
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+    }
+
+    #[Test]
+    public function jackson_attributes_force_request_injection_and_response_serialization(): void
+    {
+        /**
+         * @see FooBarController::attribute
+         */
+        $this->client->request('POST', '/attribute', [
+            'message' => 'Hello from an attribute',
+        ]);
+
+        $response = $this->client->getResponse();
+
+        $this->assertJsonStringEqualsJsonString(
+            <<<JSON
+                {
+                  "message": "Hello from an attribute"
+                }
+                JSON,
+            $response->getContent(),
+        );
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
+        $this->assertEquals('attribute', $response->headers->get('X-Jackson'));
     }
 }

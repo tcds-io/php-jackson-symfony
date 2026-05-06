@@ -8,6 +8,5 @@ readonly class InvoiceQuery
         public int $id,
         public int $userId,
         public string $customer,
-    ) {
-    }
+    ) {}
 }

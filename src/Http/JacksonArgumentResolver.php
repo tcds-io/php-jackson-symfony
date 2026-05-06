@@ -10,33 +10,29 @@ use Tcds\Io\Generic\Reflection\ReflectionMethod;
 use Tcds\Io\Generic\Reflection\Type\ReflectionType;
 use Tcds\Io\Jackson\Exception\JacksonException;
 use Tcds\Io\Jackson\ObjectMapper;
+use Tcds\Io\Jackson\Symfony\Attributes\JacksonInject;
 use Tcds\Io\Jackson\Symfony\JacksonConfig;
 
 final readonly class JacksonArgumentResolver implements ValueResolverInterface
 {
-    public function __construct(private ObjectMapper $mapper, private JacksonConfig $config)
-    {
-    }
+    public function __construct(private ObjectMapper $mapper, private JacksonConfig $config) {}
 
     /**
      * @throws JacksonException
      * @throws BetterGenericException
+     * @return iterable<mixed>
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
-        if ($this->config->readable($argument->getType())) {
-            return [
-                $this->parseSerializableType(
-                    type: $argument->getType(),
-                    isList: false,
-                    request: $request,
-                ),
-            ];
+        $type = $argument->getType();
+
+        if ($type !== null && $this->config->readable($type)) {
+            return [$this->parseSerializableType(type: $type, isList: false, request: $request)];
         }
 
         $type = $this->annotated($argument);
 
-        if ($this->config->readable($type)) {
+        if ($this->shouldResolveWithJackson($argument, $type)) {
             return [
                 $this->parseSerializableType(
                     type: $type,
@@ -60,25 +56,31 @@ final readonly class JacksonArgumentResolver implements ValueResolverInterface
         return $param->getType()->getName();
     }
 
+    private function shouldResolveWithJackson(ArgumentMetadata $argument, string $type): bool
+    {
+        return $argument->getAttributes(JacksonInject::class) !== []
+            || $this->config->readable($type);
+    }
+
     /**
-     * @template T of object
-     * @param class-string<T> $type
-     * @return T
      * @throws JacksonException
      */
     private function parseSerializableType(string $type, bool $isList, Request $request): mixed
     {
         return $this->mapper->readValue(
-            type: $type,
+            type: generic($type, []),
             value: $this->getRequestData($isList, $request),
         );
     }
 
     /**
-     * @return ($isList is true ? list<mixed> : array<string, mixed>)
+     * @return array<mixed>
      */
     private function getRequestData(bool $isList, Request $request): array
     {
+        $routeParams = $request->attributes->get('_route_params', []);
+        $routeParams = is_array($routeParams) ? $routeParams : [];
+
         return $isList
             // when desired type is list, then grab only payload because
             // query and path params will mess up with the list payload
@@ -88,7 +90,7 @@ final readonly class JacksonArgumentResolver implements ValueResolverInterface
                 $this->config->customParams(),
                 $request->query->all(),
                 $request->request->all(),
-                $request->attributes->get('_route_params', []),
+                $routeParams,
             );
     }
 }

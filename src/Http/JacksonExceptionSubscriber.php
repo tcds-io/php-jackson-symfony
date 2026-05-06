@@ -3,14 +3,15 @@
 namespace Tcds\Io\Jackson\Symfony\Http;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Tcds\Io\Jackson\Exception\UnableToParseValue;
+use Tcds\Io\Jackson\Symfony\JacksonConfig;
 
 class JacksonExceptionSubscriber implements EventSubscriberInterface
 {
+    public function __construct(private readonly JacksonConfig $config) {}
+
     public static function getSubscribedEvents(): array
     {
         return [KernelEvents::EXCEPTION => 'onException'];
@@ -24,15 +25,6 @@ class JacksonExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $event->setResponse(
-            new JsonResponse(
-                data: [
-                    'message' => $exception->getMessage(),
-                    'expected' => $exception->expected,
-                    'given' => $exception->given,
-                ],
-                status: Response::HTTP_BAD_REQUEST,
-            ),
-        );
+        $event->setResponse($this->config->handleRequestError($exception));
     }
 }
