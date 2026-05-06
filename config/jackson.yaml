@@ -31,4 +31,6 @@ services:
     tags: [ kernel.event_subscriber ]
 
   Tcds\Io\Jackson\Symfony\Http\JacksonExceptionSubscriber:
+    arguments:
+      $config: '@Tcds\Io\Jackson\Symfony\JacksonConfig'
     tags: [ kernel.event_subscriber ]

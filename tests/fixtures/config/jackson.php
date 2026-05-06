@@ -2,6 +2,9 @@
 
 use App\Services\AuthTokenService;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
+use Tcds\Io\Jackson\Exception\UnableToParseValue;
 use Tcds\Io\Jackson\Node\Reader;
 use Tcds\Io\Jackson\Node\StaticReader;
 use Tcds\Io\Jackson\Node\StaticWriter;
@@ -18,6 +21,12 @@ use Tcds\Io\Jackson\ObjectMapper;
  * }
  */
 return [
+    'errors' => [
+        'request' => fn(UnableToParseValue $e) => new JsonResponse([
+            'error' => $e->getMessage(),
+            'hint' => 'Check the request body format.',
+        ], Response::HTTP_UNPROCESSABLE_ENTITY),
+    ],
     'mappers' => [
         App\Domain\Foo::class => [],
         App\Queries\InvoiceQuery::class => [],
